@@ -27,7 +27,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'roll':
                 bot.sendMessage({
                     to: channelID,
-                    message: 'recognized'
+                    message: 'hi Rogan'
                 });
             break;
          }
