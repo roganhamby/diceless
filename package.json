@@ -1,0 +1,11 @@
+{
+  "name": "diceless",
+  "version": "0.0.1",
+  "description": "A Bot That Bots",
+  "main": "core.js",
+  "author": "Rogan Hamby",
+  "dependencies": {
+    "discord.io": "^2.5.3",
+    "winston": "^3.2.1"
+  }
+}
