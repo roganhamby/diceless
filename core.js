@@ -16,16 +16,28 @@ function generateRandomNumber(max) {
     var r = Math.floor(Math.random() * max) +1;
     return r;
 }
-function rollDice(user, theroll, rr) {
+function rollDNDStats(user,rr,dpl) {
+    var theroll = "3d6";
+    if (dpl == 1) { theroll = "4d6"; }
+    var i;
+    var line;
+    var msg = user + "'s stats rolls are: \n";
+    for (i = 0; i < 6; i++) {
+        line = rollDice(theroll, rr, dpl);
+        msg = msg + line + "\n";
+    }
+    return msg;
+}
+function rollDice(theroll, rr, dpl) {
     var roll = theroll.split("d");
     var die = roll[1];
     var num = roll[0];
     var i;
+    var lowest = die + 1;
     var res;
-    var msg = user + "'s roll(s) for " + theroll + " are: ";
+    var msg = theroll + " and the dice gods giveth  ";
     var total = 0;
     var badresult;
-    logger.info("rr is " + rr);
     for (i = 0; i < num; i++) {
         res = generateRandomNumber(die);
         if (res <= rr) {
@@ -33,10 +45,18 @@ function rollDice(user, theroll, rr) {
             badresult = strikeThrough(res);
             res = 0; 
             msg = msg + badresult + " "; 
-        } else { msg = msg + res + " "; }
+        } else {
+            if (res < lowest) { lowest = res; }     
+            msg = msg + res + " "; 
+        }
         total = total + res;
     }
-    msg = msg + "... total is " + total;
+    if (dpl == 0) { 
+            msg = msg + "... total is " + total; 
+        } else { 
+            total = total - lowest;
+            msg = msg + "drop lowest of " + lowest + "... total is " + total; 
+        }
     return msg;
 }
 function strikeThrough(result) {
@@ -75,20 +95,43 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         cleaned = message.substring(1);
         cleaned = cleaned.replace(/ +(?= )/g,'');
         var args = cleaned.split(' ');
+        //args = args.splice(1);
         var cmd = args[0];
         var argx = args[1];
         var argy = args[2];
         var argz = args[3];
+        var rr = 0;
+        var dpl = 0;
+        var roll;
         var msg;
-
+        if (typeof argx !== 'undefined') {
+            if (argx == "dpl") { dpl = 1; }
+            if (argx.includes("rr")) { rr = argx.split("rr")[1]; }
+            if (argx.includes("d") && argx != 'dpl') { roll = argx; }
+        }
+        if (typeof argy !== 'undefined') {
+            if (argy == "dpl") { dpl = 1; }
+            if (argy.includes("rr")) { rr = argy.split("rr")[1]; }
+            if (argy.includes("d") && argy != 'dpl') { roll = argy; }
+        }
+        if (typeof argz !== 'undefined') {
+            if (argz == "dpl") { dpl = 1; }
+            if (argz.includes("rr")) { rr = argz.split("rr")[1]; }
+            if (argz.includes("d") && argz != 'dpl') { roll = argz; }
+        }
         args = args.splice(1);
         switch(cmd) {
             case 'roll':
-                var rr = 0;
-                if (typeof argy !== 'undefined') {
-                    rr = argy.split("rr")[1];
-                }               
-                msg = rollDice(user,argx,rr);
+                logger.info(roll + rr + dpl);
+                msg = rollDice(roll,rr,dpl);
+                msg = user + " rolls " + msg;
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+            break;
+            case 'dndstats':
+                msg = rollDNDStats(user,rr,dpl);
                 bot.sendMessage({
                     to: channelID,
                     message: msg
