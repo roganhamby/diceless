@@ -12,6 +12,14 @@ var bot = new Discord.Client({
    token: auth.token,
    autorun: true
 });
+function summonTrinket() {
+    var fs = require("fs");
+    var contents = fs.readFileSync("trinkets.json");
+    var jsonContent = JSON.parse(contents);
+    var r = Math.floor(Math.random() * (jsonContent.length - 1) * 1);
+    var x = jsonContent[r];
+    return x; 
+}
 bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
@@ -30,6 +38,21 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: 'hi Rogan'
                 });
             break;
+            case 'whois':
+                bot.sendMessage({
+                    to: channelID,
+                    message: 'Rogan is the progenitor, source of all love and wisdom.'
+                });
+            break;
+            case 'trinket':
+                var m = summonTrinket();
+                m = "Trinket: " + m;
+                bot.sendMessage({
+                    to: channelID,
+                    message: m
+                });
+            break;
          }
      }
 });
+
