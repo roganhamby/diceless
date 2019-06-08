@@ -12,11 +12,15 @@ var bot = new Discord.Client({
    token: auth.token,
    autorun: true
 });
+function generateRandomNumber(max) {
+    var r = Math.floor(Math.random() * max) +1;
+    return r;
+}
 function summonTrinket() {
     var fs = require("fs");
     var contents = fs.readFileSync("trinkets.json");
     var jsonContent = JSON.parse(contents);
-    var r = Math.floor(Math.random() * (jsonContent.length - 1) * 1);
+    var r = generateRandomNumber(jsonContent.length);
     var x = jsonContent[r];
     return x; 
 }
@@ -25,7 +29,7 @@ function insultBerk(berk) {
         var fs = require("fs");
         var contents = fs.readFileSync("insults.json");
         var jsonContent = JSON.parse(contents);
-        var r = Math.floor(Math.random() * (jsonContent.length - 1) * 1);
+        var r = generateRandomNumber(jsonContent.length);
         var x = jsonContent[r];
     }
     x = berk + x; 
@@ -47,10 +51,11 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         args = args.splice(1);
         switch(cmd) {
-            case 'roll':
+            case 'die':
+                msg = generateRandomNumber(argx);
                 bot.sendMessage({
                     to: channelID,
-                    message: 'hi Rogan'
+                    message: msg
                 });
             break;
             case 'insult':
