@@ -16,6 +16,36 @@ function generateRandomNumber(max) {
     var r = Math.floor(Math.random() * max) +1;
     return r;
 }
+function rollDice(user, theroll, rr) {
+    var roll = theroll.split("d");
+    var die = roll[1];
+    var num = roll[0];
+    var i;
+    var res;
+    var msg = user + "'s roll(s) for " + theroll + " are: ";
+    var total = 0;
+    var badresult;
+    logger.info("rr is " + rr);
+    for (i = 0; i < num; i++) {
+        res = generateRandomNumber(die);
+        if (res <= rr) {
+            i--;
+            badresult = strikeThrough(res);
+            res = 0; 
+            msg = msg + badresult + " "; 
+        } else { msg = msg + res + " "; }
+        total = total + res;
+    }
+    msg = msg + "... total is " + total;
+    return msg;
+}
+function strikeThrough(result) {
+    var x = result.toString();
+    var a = x.split('');
+    var b = a.map(char => char + '\u0336');
+    var c = b.join('');
+    return c;
+}
 function summonTrinket() {
     var fs = require("fs");
     var contents = fs.readFileSync("trinkets.json");
@@ -42,7 +72,9 @@ bot.on('ready', function (evt) {
 });
 bot.on('message', function (user, userID, channelID, message, evt) {
     if (message.substring(0, 1) == '/') {
-        var args = message.substring(1).split(' ');
+        cleaned = message.substring(1);
+        cleaned = cleaned.replace(/ +(?= )/g,'');
+        var args = cleaned.split(' ');
         var cmd = args[0];
         var argx = args[1];
         var argy = args[2];
@@ -51,8 +83,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         args = args.splice(1);
         switch(cmd) {
-            case 'die':
-                msg = generateRandomNumber(argx);
+            case 'roll':
+                var rr = 0;
+                if (typeof argy !== 'undefined') {
+                    rr = argy.split("rr")[1];
+                }               
+                msg = rollDice(user,argx,rr);
                 bot.sendMessage({
                     to: channelID,
                     message: msg
