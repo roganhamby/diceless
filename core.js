@@ -32,12 +32,28 @@ function rollDice(theroll, rr, dpl) {
     var roll = theroll.split("d");
     var die = roll[1];
     var num = roll[0];
+    var additive = 0;
+    var subtractive = 0;
+    var modifier = 0;
+    var split_die;
     var i;
     var lowest = die + 1;
     var res;
     var msg = theroll + " and the dice gods giveth  ";
     var total = 0;
     var badresult;
+    if (die.includes("-")) { 
+        subtractive = 1; 
+        split_die = die.split("-"); 
+        modifier = split_die[1];
+        die = split_die[0];
+    }
+    if (die.includes("+")) {
+        additive = 1; 
+        split_die = die.split("+"); 
+        modifier = split_die[1];
+        die = split_die[0];
+    }
     for (i = 0; i < num; i++) {
         res = generateRandomNumber(die);
         if (res <= rr) {
@@ -51,6 +67,8 @@ function rollDice(theroll, rr, dpl) {
         }
         total = total + res;
     }
+    if (additive == 1) { total = total + parseInt(modifier); }
+    if (subtractive == 1) { total = total - parseInt(modifier); }
     if (dpl == 0) { 
             msg = msg + "... total is " + total; 
         } else { 

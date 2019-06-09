@@ -31,6 +31,13 @@ lowest. Also, these do not requires a specific order so
 
 are all functionaly identical.
 
+Basic rolls will also allow you to add and subtract from the total so a command like 
+/roll 3d8+7 
+or 
+/roll 3d8-2 
+
+are both valid.
+
 == Insults
 
 /insult foo will issue an insult from a stored list to a person.  These are mostly 
