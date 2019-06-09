@@ -30,9 +30,6 @@ function rollDNDStats(user,rr,drop) {
     return msg;
 }
 function rollDice(theroll, rr, drop) {
-    logger.info("the roll: " + theroll);
-    logger.info("rr: " + rr);
-    logger.info("drop: " + drop);
     var roll = theroll.split("d");
     var die = roll[1];
     var num = roll[0];
@@ -41,7 +38,7 @@ function rollDice(theroll, rr, drop) {
     var modifier = 0;
     var split_die;
     var i;
-    var lowest = die + 1;
+    var lowest = parseInt(die) + 1;
     var highest = 0;
     var res;
     var msg = theroll + " and dice gods giveth  ";
@@ -79,9 +76,6 @@ function rollDice(theroll, rr, drop) {
         msg = msg + "... total is " + total; 
     } 
     if (drop == 'lowest') {
-        logger.info("msg: " + msg);
-        logger.info("lowest: " + lowest);
-        logger.info("total: " + total);
         total = total - lowest;
         msg = msg + "drop lowest of " + lowest + "... total is " + total; 
     }
@@ -162,7 +156,6 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         args = args.splice(1);
         switch(cmd) {
             case 'roll':
-                logger.info("drop is " + drop);
                 msg = rollDice(roll,rr,drop);
                 msg = user + " rolls " + msg;
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
