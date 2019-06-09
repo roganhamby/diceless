@@ -30,6 +30,9 @@ function rollDNDStats(user,rr,drop) {
     return msg;
 }
 function rollDice(theroll, rr, drop) {
+    logger.info("the roll: " + theroll);
+    logger.info("rr: " + rr);
+    logger.info("drop: " + drop);
     var roll = theroll.split("d");
     var die = roll[1];
     var num = roll[0];
@@ -58,24 +61,27 @@ function rollDice(theroll, rr, drop) {
     }
     for (i = 0; i < num; i++) {
         res = generateRandomNumber(die);
-        if (res > highest) { highest = res; }
         if (res <= rr) {
             i--;
             badresult = strikeThrough(res);
             res = 0; 
             msg = msg + badresult + " "; 
         } else {
-            if (res < lowest) { lowest = res; }     
+            if (res < lowest) { lowest = parseInt(res); }     
+            if (res > highest) { highest = parseInt(res); }
             msg = msg + res + " "; 
         }
         total = total + res;
     }
-    if (additive == 1) { total = total + parseInt(modifier); }
-    if (subtractive == 1) { total = total - parseInt(modifier); }
+    if (additive == 1) { total = parseInt(total) + parseInt(modifier); }
+    if (subtractive == 1) { total = parseInt(total) - parseInt(modifier); }
     if (drop == 'none') { 
         msg = msg + "... total is " + total; 
     } 
     if (drop == 'lowest') {
+        logger.info("msg: " + msg);
+        logger.info("lowest: " + lowest);
+        logger.info("total: " + total);
         total = total - lowest;
         msg = msg + "drop lowest of " + lowest + "... total is " + total; 
     }
