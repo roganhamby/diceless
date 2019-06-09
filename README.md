@@ -22,6 +22,11 @@ of resultant values the failed rolls will be displayed with a strikethrough.
 dpl is a command to drop the lowest.  The lowest value dropped is shown after the 
 resultant list.  So, /roll 3d6 dpl will roll three six sided dice and drop the lowest.
 
+dph is a command to drop the highest.  
+
+Functionally 2d20 dpl in D&D 5E is rolling with advantage and 2d20 dph is with 
+disadvantage.
+
 You can combine these to do a roll such as /roll 4d6 rr1 dpl to reroll 1s and drop the
 lowest. Also, these do not requires a specific order so 
 
