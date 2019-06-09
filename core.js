@@ -110,8 +110,14 @@ bot.on('ready', function (evt) {
 });
 bot.on('message', function (user, userID, channelID, message, evt) {
     if (message.substring(0, 1) == '/') {
+        var cleaned;
+        var comment;
+        var msg_split;
         cleaned = message.substring(1);
         cleaned = cleaned.replace(/ +(?= )/g,'');
+        msg_split = cleaned.split("#");
+        cleaned = msg_split[0];
+        comment = msg_split[1];
         var args = cleaned.split(' ');
         //args = args.splice(1);
         var cmd = args[0];
@@ -143,6 +149,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 logger.info(roll + rr + dpl);
                 msg = rollDice(roll,rr,dpl);
                 msg = user + " rolls " + msg;
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
                     message: msg
@@ -150,6 +157,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             break;
             case 'dndstats':
                 msg = rollDNDStats(user,rr,dpl);
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
                     message: msg
@@ -157,6 +165,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             break;
             case 'insult':
                 msg = insultBerk(argx);
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
                     message: msg
@@ -165,6 +174,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'trinket':
                 msg = summonTrinket();
                 msg = "Trinket: " + msg;
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
                     message: msg
