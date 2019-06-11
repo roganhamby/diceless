@@ -29,6 +29,57 @@ function rollDNDStats(user,rr,drop) {
     }
     return msg;
 }
+function rollArguments(args) {
+    var a = args[0];
+    var b = args[1];
+    var c = args[2];
+    var d = args[3];
+    var e = args[4];
+    var roll = "1d20"; //safeguard against no roll being sent & a cheat for dndstats
+    var drop = 'none';
+    var rr = 0;
+    var r = [];
+    logger.info (a + " " + b + " " + c);
+    if (typeof a !== 'undefined') {
+        if (a == "dpl") { drop = 'lowest'; }
+        if (a == "dph") { drop = 'highest'; }
+        if (a.includes("rr")) { rr = a.split("rr")[1]; }
+        if (a.includes("d") && a != 'dpl' && a != 'dph') { roll = a; }
+    }
+    if (typeof b !== 'undefined') {
+        if (b == "dpl") { drop = 'lowest'; }
+        if (b == "dph") { drop = 'highest'; }
+        if (b.includes("rr")) { rr = b.split("rr")[1]; }
+        if (b.includes("d") && b != 'dpl' && b != 'dph') { roll = b; }
+    }
+    if (typeof c !== 'undefined') {
+        if (c == "dpl") { drop = 'lowest'; }
+        if (c == "dph") { drop = 'highest'; }
+        if (c.includes("rr")) { rr = c.split("rr")[1]; }
+        if (c.includes("d") && c != 'dpl' && c != 'dph') { roll = c; }
+    }
+    if (typeof d !== 'undefined') {
+        if (d == "dpl") { drop = 'lowest'; }
+        if (d == "dph") { drop = 'highest'; }
+        if (d.includes("rr")) { rr = d.split("rr")[1]; }
+        if (d.includes("d") && d != 'dpl' && d != 'dph') { roll = d; }
+    }  
+    if (typeof e !== 'undefined') {
+        if (e == "dpl") { drop = 'lowest'; }
+        if (e == "dph") { drop = 'highest'; }
+        if (e.includes("rr")) { rr = e.split("rr")[1]; }
+        if (e.includes("d") && e != 'dpl' && e != 'dph') { roll = e; }
+    }  
+    if (typeof roll !== 'undefined') { 
+        r[0] = roll;
+        r[1] = rr;
+        r[2] = drop;
+    } else {
+        return new Error("Can't proceed without a roll")
+    }
+    logger.info(r);
+    return r;
+}
 function rollDice(theroll, rr, drop) {
     var roll = theroll.split("d");
     var die = roll[1];
@@ -128,34 +179,18 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         comment = msg_split[1];
         var args = cleaned.split(' ');
         var cmd = args[0];
-        var argx = args[1];
-        var argy = args[2];
-        var argz = args[3];
-        var rr = 0;
-        var drop = 'none';
+        var returned_args;
+        var rr;
+        var drop;
         var roll;
         var msg;
-        if (typeof argx !== 'undefined') {
-            if (argx == "dpl") { drop = 'lowest'; }
-            if (argx == "dph") { drop = 'highest'; }
-            if (argx.includes("rr")) { rr = argx.split("rr")[1]; }
-            if (argx.includes("d") && argx != 'dpl' && argx != 'dph') { roll = argx; }
-        }
-        if (typeof argy !== 'undefined') {
-            if (argy == "dpl") { drop = 'lowest'; }
-            if (argy == "dph") { drop = 'highest'; }
-            if (argy.includes("rr")) { rr = argy.split("rr")[1]; }
-            if (argy.includes("d") && argy != 'dpl' && argy != 'dph') { roll = argy; }
-        }
-        if (typeof argz !== 'undefined') {
-            if (argz == "dpl") { drop = 'lowest'; }
-            if (argz == "dph") { drop = 'highest'; }
-            if (argz.includes("rr")) { rr = argz.split("rr")[1]; }
-            if (argz.includes("d") && argz != 'dpl' && argz != 'dph') { roll = argz; }
-        }
         args = args.splice(1);
         switch(cmd) {
             case 'roll':
+                returned_args = rollArguments(args);
+                roll = returned_args[0];
+                rr = returned_args[1];
+                drop = returned_args[2];
                 msg = rollDice(roll,rr,drop);
                 msg = user + " rolls " + msg;
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
@@ -165,6 +200,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
             break;
             case 'dndstats':
+                returned_args = rollArguments(args);
+                roll = returned_args[0];
+                rr = returned_args[1];
+                drop = returned_args[2];
                 msg = rollDNDStats(user,rr,drop);
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
@@ -173,7 +212,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
             break;
             case 'insult':
-                msg = insultBerk(argx);
+                var berk = args[0];
+                if (typeof berk !== 'undefined') { msg = insultBerk(berk); } else 
+                    { msg = "I'm not going to, like, insult myself dude."; }
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
