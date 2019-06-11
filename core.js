@@ -35,11 +35,10 @@ function rollArguments(args) {
     var c = args[2];
     var d = args[3];
     var e = args[4];
-    var roll = "1d20"; //safeguard against no roll being sent & a cheat for dndstats
+    var roll;
     var drop = 'none';
     var rr = 0;
     var r = [];
-    logger.info (a + " " + b + " " + c);
     if (typeof a !== 'undefined') {
         if (a == "dpl") { drop = 'lowest'; }
         if (a == "dph") { drop = 'highest'; }
@@ -70,14 +69,13 @@ function rollArguments(args) {
         if (e.includes("rr")) { rr = e.split("rr")[1]; }
         if (e.includes("d") && e != 'dpl' && e != 'dph') { roll = e; }
     }  
-    if (typeof roll !== 'undefined') { 
-        r[0] = roll;
-        r[1] = rr;
-        r[2] = drop;
-    } else {
-        return new Error("Can't proceed without a roll")
+    if (typeof roll == 'undefined') {
+        if (drop == 'lowest' || drop == 'highest') { roll = '2d20'; } 
+            else { roll = '1d20'; }
     }
-    logger.info(r);
+    r[0] = roll;
+    r[1] = rr;
+    r[2] = drop;
     return r;
 }
 function rollDice(theroll, rr, drop) {

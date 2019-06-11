@@ -43,6 +43,11 @@ or
 
 are both valid.
 
+The XdY parameter is optional, /roll by itself will roll 1d20.  Combined with dpl or dph
+it will assume it will roll 2d20 so 
+/roll dpl = D&D 5E's rolling with advantage
+/roll dph = rolling with disadvantage
+
 == Insults
 
 /insult foo will issue an insult from a stored list to a person.  These are mostly 
