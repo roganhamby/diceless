@@ -48,6 +48,23 @@ it will assume it will roll 2d20 so
 /roll dpl = D&D 5E's rolling with advantage
 /roll dph = rolling with disadvantage
 
+== Split
+
+/split will split D&D style money among party members.
+
+typical usaage: /split 10pp 80gp 42sp 1cp 4ways 
+ressult: Each party member gets 27 platinum, 1 gold, 1 silver, 5 copper.
+ There is 1 coopper left over.
+
+Currently it assumes the values are liquidated and does not use electrum, because ... 
+I don't use electrum.  You can put any number of arguments on the command line and 
+repeat values so that you don't have to add it up yourself.  For example, this is 
+also valid:
+
+/split 3ways 10gp 40sp 18sp 4cp 90cp 20pp
+
+Parameters can be passed in any order.
+
 == Insults
 
 /insult foo will issue an insult from a stored list to a person.  These are mostly 

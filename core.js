@@ -29,6 +29,23 @@ function rollDNDStats(user,rr,drop) {
     }
     return msg;
 }
+function splitArguments(args) {
+    var array_length = args.length;
+    var ways = 0;
+    var haul = 0;
+    var r = [];
+    var i;
+    for (i = 0; i < array_length; i++) {
+        if (args[i].includes("ways")) { ways = args[i].split("ways")[0]; }
+        if (args[i].includes("cp")) { haul = haul + parseInt(args[i].split("cp")[0]); }
+        if (args[i].includes("sp")) { haul = haul + (parseInt(args[i].split("cp")[0]) * 10); }
+        if (args[i].includes("gp")) { haul = haul + (parseInt(args[i].split("gp")[0]) * 100); }
+        if (args[i].includes("pp")) { haul = haul + (parseInt(args[i].split("pp")[0]) * 1000); }
+    }
+    r[0] = ways;
+    r[1] = haul;
+    return r;
+}
 function rollArguments(args) {
     var array_length = args.length;
     var roll;
@@ -102,6 +119,20 @@ function rollDice(theroll, rr, drop) {
         msg = msg + "drop highest of " + highest + "... total is " + total; 
     }
     return msg;
+}
+function splitHaul(ways,haul) {
+    var per_div = Math.round(haul / ways);
+    var per_mod = haul % ways;
+    // per player
+    var leftovers;
+    var pp = Math.round(per_div / 1000);
+    leftovers = per_div % 1000;
+    var gp = Math.round(leftovers / 100);
+    leftovers = leftovers % 100;
+    var sp = Math.round(leftovers / 10);
+    var cp = leftovers % 10;
+    var r = "Each party member gets " + pp + " platinum, " + gp + " gold, " + sp + " silver, " + cp + " copper.\n There is " + per_mod + " coopper left over.";
+    return r; 
 }
 function strikeThrough(result) {
     var x = result.toString();
@@ -182,6 +213,18 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 var berk = args[0];
                 if (typeof berk !== 'undefined') { msg = insultBerk(berk); } else 
                     { msg = "I'm not going to, like, insult myself dude."; }
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+            break;
+            case 'split':
+                returned_args = splitArguments(args);
+                var ways = returned_args[0];
+                var haul = returned_args[1];
+                if (ways !== 0) { msg = splitHaul(ways,haul); } 
+                    else { msg = 'You have to tell us how many party members to split it up among.'; }
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
