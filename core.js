@@ -30,48 +30,17 @@ function rollDNDStats(user,rr,drop) {
     return msg;
 }
 function rollArguments(args) {
-    var a = args[0];
-    var b = args[1];
-    var c = args[2];
-    var d = args[3];
-    var e = args[4];
+    var array_length = args.length;
     var roll;
     var drop = 'none';
     var rr = 0;
     var r = [];
-    if (typeof a !== 'undefined') {
-        if (a == "dpl") { drop = 'lowest'; }
-        if (a == "dph") { drop = 'highest'; }
-        if (a.includes("rr")) { rr = a.split("rr")[1]; }
-        if (a.includes("d") && a != 'dpl' && a != 'dph') { roll = a; }
-    }
-    if (typeof b !== 'undefined') {
-        if (b == "dpl") { drop = 'lowest'; }
-        if (b == "dph") { drop = 'highest'; }
-        if (b.includes("rr")) { rr = b.split("rr")[1]; }
-        if (b.includes("d") && b != 'dpl' && b != 'dph') { roll = b; }
-    }
-    if (typeof c !== 'undefined') {
-        if (c == "dpl") { drop = 'lowest'; }
-        if (c == "dph") { drop = 'highest'; }
-        if (c.includes("rr")) { rr = c.split("rr")[1]; }
-        if (c.includes("d") && c != 'dpl' && c != 'dph') { roll = c; }
-    }
-    if (typeof d !== 'undefined') {
-        if (d == "dpl") { drop = 'lowest'; }
-        if (d == "dph") { drop = 'highest'; }
-        if (d.includes("rr")) { rr = d.split("rr")[1]; }
-        if (d.includes("d") && d != 'dpl' && d != 'dph') { roll = d; }
-    }  
-    if (typeof e !== 'undefined') {
-        if (e == "dpl") { drop = 'lowest'; }
-        if (e == "dph") { drop = 'highest'; }
-        if (e.includes("rr")) { rr = e.split("rr")[1]; }
-        if (e.includes("d") && e != 'dpl' && e != 'dph') { roll = e; }
-    }  
-    if (typeof roll == 'undefined') {
-        if (drop == 'lowest' || drop == 'highest') { roll = '2d20'; } 
-            else { roll = '1d20'; }
+    var i;
+    for (i = 0; i < array_length; i++) {
+        if (args[i] == "dpl") { drop = 'lowest'; }
+        if (args[i] == "dph") { drop = 'highest'; }
+        if (args[i].includes("rr")) { rr = args[i].split("rr")[1]; }
+        if (args[i].includes("d") && args[i] != 'dpl' && args[i] != 'dph') { roll = args[i]; }
     }
     r[0] = roll;
     r[1] = rr;
