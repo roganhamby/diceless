@@ -79,6 +79,7 @@ function rollDice(theroll, rr, drop) {
     var msg = theroll + " and dice gods giveth  ";
     var total = 0;
     var badresult;
+    var pass = 1;
     if (die.includes("-")) { 
         subtractive = 1; 
         split_die = die.split("-"); 
@@ -118,6 +119,11 @@ function rollDice(theroll, rr, drop) {
         total = total - highest;
         msg = msg + "drop highest of " + highest + "... total is " + total; 
     }
+    if (Number.isInteger(parseInt(rr)) == false) { pass = 0; }
+    if (Number.isInteger(parseInt(die)) == false) { pass = 0; }
+    if (Number.isInteger(parseInt(num)) == false) { pass = 0; }
+    if (Number.isInteger(parseInt(modifier)) == false) { pass = 0; }
+    if (pass == 0) { msg = 'Natural -1. Please check your command syntax.'; }
     return msg;
 }
 function splitHaul(ways,haul) {
