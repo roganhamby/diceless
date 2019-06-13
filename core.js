@@ -214,18 +214,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     to: channelID,
                     message: msg
                 });
-            break;
-            case 'insult':
-                var berk = args[0];
-                if (typeof berk !== 'undefined') { msg = insultBerk(berk); } else 
-                    { msg = "I'm not going to, like, insult myself dude."; }
-                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
-                bot.sendMessage({
-                    to: channelID,
-                    message: msg
-                });
-            break;
-            case 'split':
+           break;
+           case 'split':
                 returned_args = splitArguments(args);
                 var ways = returned_args[0];
                 var haul = returned_args[1];
@@ -241,6 +231,21 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 msg = summonTrinket();
                 msg = "Trinket: " + msg;
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+            break;
+            case 'diceless':
+                msg = "Diceless supports the following commands:\n";
+                msg = msg + "    /trinket #gives one from a random list of items\n";
+                msg = msg + "    /roll 3d6+2 dpl rr2 #make roll, drop lowest reroll 2s and 1s\n";
+                msg = msg + "    /dndstats rr1 #rolls 3d6 six times and rerolls 1s\n";
+                msg = msg + "    /dndstats dpl #rolls 4d6 six times and rerolls 1s\n";
+                msg = msg + "    /split 4pp 3gp 2cp 8cp 7sp 9pp 5 ways #adds up the money and splits it\n";
+                msg = msg + "# comments will append comments to the response from the bot #see README for more info\n";
+                msg = msg + "source at https://github.com/roganhamby/diceless\n";
+                msg = msg + "project tracking at https://trello.com/b/RN9kMwiS/diceless\n";
                 bot.sendMessage({
                     to: channelID,
                     message: msg
