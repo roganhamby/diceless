@@ -155,17 +155,6 @@ function summonTrinket() {
     var x = jsonContent[r];
     return x; 
 }
-function insultBerk(berk) {
-    if (berk.toLowerCase() == "rogan") { x = ' is the totoro, progenitor, source of love and wisdom.' } else {
-        var fs = require("fs");
-        var contents = fs.readFileSync("insults.json");
-        var jsonContent = JSON.parse(contents);
-        var r = generateRandomNumber(jsonContent.length);
-        var x = jsonContent[r];
-    }
-    x = berk + x; 
-    return x;
-}
 bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
