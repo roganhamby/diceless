@@ -36,12 +36,14 @@ lowest. Also, these do not requires a specific order so
 
 are all functionaly identical.
 
-Basic rolls will also allow you to add and subtract from the total so a command like 
-/roll 3d8+7 
-or 
-/roll 3d8-2 
+Basic rolls will also allow you to apply basic mathematicl operators to  the total,
+so a command like 
+/roll 3d8 +7  #is valid
+or you can send multiple operators 
+/roll 3d8 -2 /2 *4
 
-are both valid.
+are both valid.  Addition/subtractions will be done and then mutipliers/dividers applied.  
+The value will be rounded down.
 
 The XdY parameter is optional, /roll by itself will roll 1d20.  Combined with dpl or dph
 it will assume it will roll 2d20 so 

@@ -1,7 +1,7 @@
 {
   "name": "diceless",
-  "version": "0.1.0",
-  "description": "A Bot That Bots",
+  "version": "0.2.0",
+  "description": "A Dicebot for Discord",
   "main": "core.js",
   "author": "Rogan Hamby",
   "dependencies": {
