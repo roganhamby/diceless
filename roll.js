@@ -1,4 +1,72 @@
 module.exports = {
+ fateArguments: function (args) {
+    var array_length = args.length;
+    var logger = require('winston');
+    var roll = '4d3';
+    var offset = 0;
+    var split_offset;
+    var r = [];
+    var i;
+    for (i = 0; i < array_length; i++) {
+        if (args[i].includes("+") && !args[i].includes("d")) {
+                split_offset = args[i].split("+");
+                offset = offset + parseInt(split_offset[1]);
+            };
+        if (args[i].includes("-") && !args[i].includes("d")) {
+                split_offset = args[i].split("-");
+                offset = offset - parseInt(split_offset[1]);
+            };
+    };
+    if (roll.includes("+")) {
+        split_offset = roll.split("+");
+        offset = offset + parseInt(split_offset[1]);
+        roll = split_offset[0];
+    }
+    if (roll.includes("-")) {
+        split_offset = roll.split("-");
+        offset = offset - parseInt(split_offset[1]);
+        roll = split_offset[0];
+    }
+    r[0] = offset;
+    return r;
+ },
+ fateDice: function (modifier) {
+    var logger = require('winston');
+    var die = 3;
+    var num = 4;
+    var i;
+    var msg = " rolls the dice and fate giveth  ";
+    var total_msg;
+    var total = 0;
+    var pass = 1;
+    var util = require('./util.js');
+    for (i = 0; i < num; i++) {
+        res = util.generateRandomNumber(die);
+        if (res == 1) { res = -1; }
+        if (res == 2) { res = 0; }
+        if (res == 3) { res = 1; }
+        msg = msg + res + " ";
+        total = total + res;
+    }
+    total = total + modifier;
+    switch(true) {
+        case total > 7: total_msg = " Legendary."; break;
+        case total == 7: total_msg = " Epic."; break;
+        case total == 6: total_msg = " Fantastic."; break;
+        case total == 5: total_msg = " Superb."; break;
+        case total == 4: total_msg = " Great."; break;
+        case total == 3: total_msg = " Good."; break;
+        case total == 2: total_msg = " Fair."; break;
+        case total == 1: total_msg = " Average."; break;
+        case total == 0: total_msg = " Mediocre."; break;
+        case total == -1: total_msg = " Poor."; break;
+        case total < -1: total_msg = " Terrible."; break;
+    } 
+    msg = msg + "... total is " + total + ", FATE roll quality is" + total_msg;
+    if (Number.isInteger(parseInt(modifier)) == false) { pass = 0; }
+    if (pass == 0) { msg = 'Natural -1. Please check your command syntax.'; }
+    return msg;
+ },
  rollArguments: function (args) {
     var array_length = args.length;
     var logger = require('winston');

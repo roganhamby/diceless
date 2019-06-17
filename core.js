@@ -62,7 +62,30 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         var msg;
         args = args.splice(1);
         switch(cmd) {
-            case 'roll':
+            case 'dndstats':
+                returned_args = rolling.rollArguments(args);
+                roll = returned_args[0];
+                rr = returned_args[1];
+                drop = returned_args[2];
+                msg = rollDNDStats(user,rr,drop);
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+           break;
+           case 'fate':
+                returned_args = rolling.fateArguments(args);
+                modifier = returned_args[0];
+                msg = rolling.fateDice(modifier);
+                msg = user + msg;
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+           break;
+           case 'roll':
                 returned_args = rolling.rollArguments(args);
                 roll = returned_args[0];
                 rr = returned_args[1];
@@ -71,18 +94,6 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 multiplier = returned_args[4];
                 msg = rolling.rollDice(roll,rr,drop,modifier,multiplier);
                 msg = user + " rolls " + msg;
-                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
-                bot.sendMessage({
-                    to: channelID,
-                    message: msg
-                });
-            break;
-            case 'dndstats':
-                returned_args = rolling.rollArguments(args);
-                roll = returned_args[0];
-                rr = returned_args[1];
-                drop = returned_args[2];
-                msg = rollDNDStats(user,rr,drop);
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
@@ -116,6 +127,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 msg = msg + "    /roll 3d6 +2 *2 dpl rr2 #make roll, drop lowest reroll 2s and 1s\n";
                 msg = msg + "    /dndstats rr1 #rolls 3d6 six times and rerolls 1s\n";
                 msg = msg + "    /dndstats dpl #rolls 4d6 six times and rerolls 1s\n";
+                msg = msg + "    /fate +3 #rolls 4dFATE DICE and gives result type\n";
                 msg = msg + "    /split 4pp 3gp 2cp 8cp 7sp 9pp 5 ways #adds up the money and splits it\n";
                 msg = msg + "# comments will append comments to the response from the bot #see README for more info\n";
                 msg = msg + "source at https://github.com/roganhamby/diceless\n";

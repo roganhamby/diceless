@@ -50,6 +50,12 @@ it will assume it will roll 2d20 so
 /roll dpl = D&D 5E's rolling with advantage
 /roll dph = rolling with disadvantage
 
+== Fate
+
+/fate +7 will roll 4dFATE DICE and add the modifier giving you a the result type, 
+so /fate +12 gives:
+Rogan rolls the dice and fate giveth  0 -1 1 0 ... total is 12, FATE roll quality is Legendary. 
+
 == Split
 
 /split will split D&D style money among party members.
@@ -66,13 +72,6 @@ also valid:
 /split 3ways 10gp 40sp 18sp 4cp 90cp 20pp
 
 Parameters can be passed in any order.
-
-== Insults
-
-/insult foo will issue an insult from a stored list to a person.  These are mostly 
-modified from historical insults plus a few of my own creation.  This feature has no
-real function but was included while playing with early bot communication features 
-and I decided to leave it in.
 
 == Trinkets
 
