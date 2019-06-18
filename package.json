@@ -6,6 +6,7 @@
   "author": "Rogan Hamby",
   "dependencies": {
     "discord.io": "^2.5.3",
+    "jsonfile": "^5.0.0",
     "winston": "^3.2.1"
   }
 }

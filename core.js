@@ -40,6 +40,8 @@ bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
+    var bagCheck = haul.checkForBag();
+    logger.info('Bag Check: ' + bagCheck);
 });
 bot.on('message', function (user, userID, channelID, message, evt) {
     if (message.substring(0, 1) == '/') {
@@ -62,6 +64,26 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         var msg;
         args = args.splice(1);
         switch(cmd) {
+            case 'bag':
+                returned_args = haul.bagArguments(args);
+                var cp = returned_args[0];
+                var sp = returned_args[1];
+                var gp = returned_args[2];
+                var pp = returned_args[3];
+                var stuff = returned_args[4];
+                var inventory = returned_args[5];
+                var deposit = returned_args[6];
+                var withdraw = returned_args[7];
+                var split = returned_args[8];
+                var liquidate = returned_args[9];
+                var wipe = returned_args[10];                               
+                msg = haul.bagofHolding(user,cp,sp,gp,pp,stuff,inventory,deposit,withdraw,split,liquidate,wipe);
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+           break;
             case 'dndstats':
                 returned_args = rolling.rollArguments(args);
                 roll = returned_args[0];
