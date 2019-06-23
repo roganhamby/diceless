@@ -1,15 +1,8 @@
 var Discord = require('discord.io');
-var auth = require('./auth.json');
-var haul = require('./haul.js');
-var rolling = require('./roll.js');
-var util = require('./util.js');
-// Configure logger settings
-//logger.remove(logger.transports.Console);
-//logger.add(new logger.transports.Console, {
-//    colorize: true
-//});
-//logger.level = 'debug';
-// Initialize Discord Bot
+const auth = require('./auth.json');
+const haul = require('./haul.js');
+const rolling = require('./roll.js');
+const util = require('./util.js');
 var bot = new Discord.Client({
    token: auth.token,
    autorun: true
