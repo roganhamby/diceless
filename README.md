@@ -4,6 +4,22 @@ my own purposes.
 
 Trello Board for Dev tracking here: https://trello.com/b/RN9kMwiS/diceless
 
+=== Prereqs
+
+SQLite3+
+
+Node 8 : https://nodejs.org/dist/latest-v8.x/node-v8.16.0.tar.gz
+
+npm install --save better-sqlite3
+npm install --save jsonfile
+npm install --save discord.io
+npm install https://github.com/woor/discord.io/tarball/gateway_v6
+
+
+=== The SQL
+
+CREATE TABLE money (name TEXT, cp INTEGER, sp INTEGER, gp INTEGER, pp INTEGER, credits INTEGER, nuyen INTEGER);
+
 === Features
 
 == Dice Rolling

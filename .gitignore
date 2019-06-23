@@ -1,3 +1,5 @@
+*.jsd
+diceless.db
+npm-debug.log
 auth.json
-bagofholding.json
 node_modules/

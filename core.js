@@ -1,15 +1,14 @@
 var Discord = require('discord.io');
-var logger = require('winston');
 var auth = require('./auth.json');
 var haul = require('./haul.js');
 var rolling = require('./roll.js');
 var util = require('./util.js');
 // Configure logger settings
-logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console, {
-    colorize: true
-});
-logger.level = 'debug';
+//logger.remove(logger.transports.Console);
+//logger.add(new logger.transports.Console, {
+//    colorize: true
+//});
+//logger.level = 'debug';
 // Initialize Discord Bot
 var bot = new Discord.Client({
    token: auth.token,
@@ -37,11 +36,9 @@ function summonTrinket() {
     return x; 
 }
 bot.on('ready', function (evt) {
-    logger.info('Connected');
-    logger.info('Logged in as: ');
-    logger.info(bot.username + ' - (' + bot.id + ')');
-    var bagCheck = haul.checkForBag();
-    logger.info('Bag Check: ' + bagCheck);
+    console.info('Connected');
+    console.info('Logged in as: ');
+    console.info(bot.username + ' - (' + bot.id + ')');
 });
 bot.on('message', function (user, userID, channelID, message, evt) {
     if (message.substring(0, 1) == '/') {
@@ -65,6 +62,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         args = args.splice(1);
         switch(cmd) {
             case 'bag':
+                haul.checkForBag(userID);
                 returned_args = haul.bagArguments(args);
                 var cp = returned_args[0];
                 var sp = returned_args[1];

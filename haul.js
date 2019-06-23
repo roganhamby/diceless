@@ -11,7 +11,7 @@ module.exports = {
     var deposit = false;
     var withdraw = false;
     var wipe = false;
-    var liquidate = false; // will take the monies and set them to their lowest number of coins
+    var consolidate = false;
     var split = false; // will split the coins, which also liquidates them 
     var r = [];
     var i;
@@ -22,7 +22,7 @@ module.exports = {
         if (args[i] == "w" || args[i] == "with" || args[i] == "withdraw") { withdraw = true; pass = true; }
         if (args[i] == "nuke" || args[i] == "wipe") { wipe = true; pass = true; }
         if (args[i] == "split") { split = true; pass = true; }
-        if (args[i] == "liquidate") { liquidate = true; pass = true; }
+        if (args[i] == "consolidate" || args[i] == "cons") { liquidate = true; pass = true; }
         if (args[i].includes("cp")) { cp = cp + parseInt(args[i].split("cp")[0]); pass = true; }
         if (args[i].includes("sp")) { sp = sp + parseInt(args[i].split("sp")[0]); pass = true; }
         if (args[i].includes("gp")) { gp = gp + parseInt(args[i].split("gp")[0]); pass = true; }
@@ -42,23 +42,12 @@ module.exports = {
     r[10] = wipe;
     return r;
  },
- checkForBag: function () {
-    var fs = require("fs");
-    var jsonfile = require('jsonfile');
-    if (fs.existsSync("./bagofholding.json")) {
-        return true;
-    } else {
-        var bagobj = { bag_contents: [
-            ['name', 'Magus McSmartypants'],
-            ['cp', 0],
-            ['sp', 0],
-            ['gp', 0],
-            ['pp', 0],
-            ['stuff', ['staff of the magi','robes of the archmage','ferret']]
-        ] };
-        var bagjson = JSON.stringify(bagobj);
-        fs.writeFile("./bagofholding.json", bagjson, 'utf8');
-    }
+ checkForBag: function (userID) {
+    var util = require('./util.js');
+    sql = "SELECT COUNT(*) FROM money WHERE name = '" + userID + "';";
+    console.info(sql);
+    var row = util.querySingleRow(sql);
+    console.info(row.c);
     return true;
  },
  splitArguments: function (args) {

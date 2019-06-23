@@ -1,7 +1,6 @@
 module.exports = {
  fateArguments: function (args) {
     var array_length = args.length;
-    var logger = require('winston');
     var roll = '4d3';
     var offset = 0;
     var split_offset;
@@ -31,7 +30,6 @@ module.exports = {
     return r;
  },
  fateDice: function (modifier) {
-    var logger = require('winston');
     var die = 3;
     var num = 4;
     var i;
@@ -69,7 +67,6 @@ module.exports = {
  },
  rollArguments: function (args) {
     var array_length = args.length;
-    var logger = require('winston');
     var roll = '1d1';
     var drop = 'none';
     var rr = 0;
