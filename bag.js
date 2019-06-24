@@ -38,16 +38,18 @@ module.exports = {
     r[6] = deposit;
     r[7] = withdraw;
     r[8] = split;
-    r[9] = liquidate;
+    r[9] = consolidate;
     r[10] = wipe;
     return r;
  },
  checkForBag: function (userID) {
     var util = require('./util.js');
-    sql = "SELECT COUNT(*) FROM money WHERE name = '" + userID + "';";
-    console.info(sql);
+    var sql = "SELECT COUNT(*) AS c FROM money WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
-    console.info(row.c);
+    if (row.c == 0) {  
+        sql = "INSERT INTO money (name,cp,sp,gp,pp) VALUES ('" + userID + "',0,0,0,0);";
+        util.runSQL(sql);
+    }
     return true;
  },
  splitArguments: function (args) {

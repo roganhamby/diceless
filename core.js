@@ -1,6 +1,6 @@
 var Discord = require('discord.io');
 const auth = require('./auth.json');
-const haul = require('./haul.js');
+const bag = require('./bag.js');
 const rolling = require('./roll.js');
 const util = require('./util.js');
 var bot = new Discord.Client({
@@ -55,8 +55,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         args = args.splice(1);
         switch(cmd) {
             case 'bag':
-                haul.checkForBag(userID);
-                returned_args = haul.bagArguments(args);
+                bag.checkForBag(userID);
+                returned_args = bag.bagArguments(args);
                 var cp = returned_args[0];
                 var sp = returned_args[1];
                 var gp = returned_args[2];
@@ -66,9 +66,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 var deposit = returned_args[6];
                 var withdraw = returned_args[7];
                 var split = returned_args[8];
-                var liquidate = returned_args[9];
+                var consolidate = returned_args[9];
                 var wipe = returned_args[10];                               
-                msg = haul.bagofHolding(user,cp,sp,gp,pp,stuff,inventory,deposit,withdraw,split,liquidate,wipe);
+                msg = "The ferrets are waiting.";
+                //msg = bag.depositOrWithdraw(user,cp,sp,gp,pp,stuff,deposit,withdraw);
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
@@ -114,10 +115,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
            break;
            case 'split':
-                returned_args = splitArguments(args);
+                returned_args = bag.splitArguments(args);
                 var ways = returned_args[0];
                 var haul = returned_args[1];
-                if (ways !== 0) { msg = splitHaul(ways,haul); } 
+                if (ways !== 0) { msg = bag.splitHaul(ways,haul); } 
                     else { msg = 'You have to tell us how many party members to split it up among.'; }
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({

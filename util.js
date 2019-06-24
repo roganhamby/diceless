@@ -11,6 +11,14 @@ module.exports = {
     db.close();
     return row;
  },
+ runSQL: function (sql) {
+    const Database = require('better-sqlite3');
+    const db = new Database('./diceless.db');
+    const sql_stmt = db.prepare(sql);
+    sql_stmt.run();
+    db.close();
+    return;
+ },
  strikeThrough: function (result) {
     var x = result.toString();
     var a = x.split('');
