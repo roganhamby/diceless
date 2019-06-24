@@ -78,8 +78,15 @@ module.exports = {
         util.runSQL(sql);
         msg = "The ferrets have adjusted your wares.  Beware.";
     } else {
-        msg = "The ferrets say your math doesn't work.  Don't scame a ferret.  They know ferrets.";
+        msg = "The ferrets say your math doesn't work.  Don't scame a ferret.  They know people.";
     }
+    return msg;
+ },
+ inventory: function (userID) {
+    var util = require('./util.js');
+    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var row = util.querySingleRow(sql);
+    var msg = "\n Current bag contents: " + row.cp + " copper, " + row.sp + " silver, " + row.gp + " gold, " + row.pp + " platinum.";
     return msg;
  },
  splitArguments: function (args) {

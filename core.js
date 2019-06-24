@@ -71,12 +71,13 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 badparams = false;                            
                 msg = "The ferrets are waiting.";
                 if (deposit == true && withdraw == true) { badparams = true; msg = "You can't have depoit and withdraw on the same command."; }
-                if (inventory == false && deposit == false && withdraw == false && split == false && consolidate == false) { badparams = true; msg = "You haven't given the ferrets anything to do.  They are now bored.  In your bag."; }
+                if (inventory == false && deposit == false && withdraw == false && split == false && consolidate == false) { badparams = true; msg = "You haven't given the ferrets anything to do.  They are now bored."; }
                 if (badparams == false) {
                     msg = "Actions taken: ";
                     //if (consolidate == true) { msg = msg + " " + bag.consolidate; } 
                     if (deposit == true || withdraw == true) { msg = msg + " " + bag.depositOrWithdraw(userID,returned_args); }
                 }
+                msg = msg + bag.inventory(userID);
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
