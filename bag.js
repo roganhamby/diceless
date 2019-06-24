@@ -18,7 +18,7 @@ module.exports = {
         if (args[i] == "d" || args[i] == "dp" || args[i] == "deposit") { deposit = true; pass = true; }
         if (args[i] == "w" || args[i] == "with" || args[i] == "withdraw") { withdraw = true; pass = true; }
         if (args[i] == "split") { split = true; pass = true; }
-        if (args[i] == "consolidate" || args[i] == "cons") { liquidate = true; pass = true; }
+        if (args[i] == "consolidate" || args[i] == "cons") { consolidate = true; pass = true; }
         if (args[i].includes("cp")) { cp = cp + parseInt(args[i].split("cp")[0]); pass = true; }
         if (args[i].includes("sp")) { sp = sp + parseInt(args[i].split("sp")[0]); pass = true; }
         if (args[i].includes("gp")) { gp = gp + parseInt(args[i].split("gp")[0]); pass = true; }
@@ -45,6 +45,21 @@ module.exports = {
         util.runSQL(sql);
     }
     return true;
+ },
+ consolidate: function (userID) {
+    var util = require('./util.js');
+    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var row = util.querySingleRow(sql);
+    var moola = row.cp + (10 * row.sp) + (100 * row.gp) + (1000 * row.pp);
+    console.info("moola is " + moola);
+    var pp = Math.floor(moola / 1000);
+    moola = moola % 1000;
+    var gp = Math.floor(moola / 100);
+    moola = moola % 100;
+    var sp = Math.floor(moola / 10);
+    var cp = moola % 10;
+    sql = "UPDATE money SET cp = " + cp + ", sp = " + sp + ", gp = " + gp + ", pp = " + pp + " WHERE name = '" + userID + "';";
+    util.runSQL(sql);
  },
  depositOrWithdraw: function (userID,args) {
     var util = require('./util.js');
@@ -104,15 +119,15 @@ module.exports = {
     return r;
  },
  splitHaul: function (ways,haul) {
-    var per_div = Math.round(haul / ways);
+    var per_div = Math.floor(haul / ways);
     var per_mod = haul % ways;
     // per player
     var leftovers;
-    var pp = Math.round(per_div / 1000);
+    var pp = Math.floor(per_div / 1000);
     leftovers = per_div % 1000;
-    var gp = Math.round(leftovers / 100);
+    var gp = Math.floor(leftovers / 100);
     leftovers = leftovers % 100;
-    var sp = Math.round(leftovers / 10);
+    var sp = Math.floor(leftovers / 10);
     var cp = leftovers % 10;
     var r = "Each party member gets " + pp + " platinum, " + gp + " gold, " + sp + " silver, " + cp + " copper.\n There is " + per_mod + " coopper left over.";
     return r;

@@ -74,6 +74,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 if (badparams == false) {
                     //if (consolidate == true) { msg = msg + " " + bag.consolidate; } 
                     if (deposit == true || withdraw == true) { msg = msg + " " + bag.depositOrWithdraw(userID,returned_args); }
+                    if (consolidate == true) { bag.consolidate(userID); msg = msg + " " + "Monies have been consolidated."; }
                 }
                 msg = msg + bag.inventory(userID);
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
