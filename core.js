@@ -51,6 +51,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         var roll;
         var modifier;
         var multiplier;
+        var badparams = false;
         var msg;
         args = args.splice(1);
         switch(cmd) {
@@ -67,16 +68,22 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 var withdraw = returned_args[7];
                 var split = returned_args[8];
                 var consolidate = returned_args[9];
-                var wipe = returned_args[10];                               
+                badparams = false;                            
                 msg = "The ferrets are waiting.";
-                //msg = bag.depositOrWithdraw(user,cp,sp,gp,pp,stuff,deposit,withdraw);
+                if (deposit == true && withdraw == true) { badparams = true; msg = "You can't have depoit and withdraw on the same command."; }
+                if (inventory == false && deposit == false && withdraw == false && split == false && consolidate == false) { badparams = true; msg = "You haven't given the ferrets anything to do.  They are now bored.  In your bag."; }
+                if (badparams == false) {
+                    msg = "Actions taken: ";
+                    //if (consolidate == true) { msg = msg + " " + bag.consolidate; } 
+                    if (deposit == true || withdraw == true) { msg = msg + " " + bag.depositOrWithdraw(userID,returned_args); }
+                }
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
                     to: channelID,
                     message: msg
                 });
            break;
-            case 'dndstats':
+           case 'dndstats':
                 returned_args = rolling.rollArguments(args);
                 roll = returned_args[0];
                 rr = returned_args[1];

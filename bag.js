@@ -10,7 +10,6 @@ module.exports = {
     var inventory = false;
     var deposit = false;
     var withdraw = false;
-    var wipe = false;
     var consolidate = false;
     var split = false; // will split the coins, which also liquidates them 
     var r = [];
@@ -20,7 +19,6 @@ module.exports = {
         if (args[i] == "i" || args[i] == "inv" || args[i] == "inventory") { inventory = true; pass = true; }
         if (args[i] == "d" || args[i] == "dp" || args[i] == "deposit") { deposit = true; pass = true; }
         if (args[i] == "w" || args[i] == "with" || args[i] == "withdraw") { withdraw = true; pass = true; }
-        if (args[i] == "nuke" || args[i] == "wipe") { wipe = true; pass = true; }
         if (args[i] == "split") { split = true; pass = true; }
         if (args[i] == "consolidate" || args[i] == "cons") { liquidate = true; pass = true; }
         if (args[i].includes("cp")) { cp = cp + parseInt(args[i].split("cp")[0]); pass = true; }
@@ -39,7 +37,6 @@ module.exports = {
     r[7] = withdraw;
     r[8] = split;
     r[9] = consolidate;
-    r[10] = wipe;
     return r;
  },
  checkForBag: function (userID) {
@@ -51,6 +48,39 @@ module.exports = {
         util.runSQL(sql);
     }
     return true;
+ },
+ depositOrWithdraw: function (userID,args) {
+    var util = require('./util.js');
+    var cp = args[0];
+    var sp = args[1];
+    var gp = args[2];
+    var pp = args[3];
+    var stuff = args[4];
+    var deposit = args[6];
+    var withdraw = args[7];
+    var msg;
+    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var row = util.querySingleRow(sql);
+    if (withdraw == true) {
+        cp = row.cp - cp;
+        sp = row.sp - sp;
+        gp = row.gp - gp;
+        pp = row.pp - pp;
+    }
+    if (deposit == true) {
+        cp = cp + row.cp;
+        sp = sp + row.sp;
+        gp = gp + row.gp;
+        pp = pp + row.pp;
+    }
+    if (cp >= 0 && sp >= 0 && gp >= 0 && pp >= 0) {
+        sql = "UPDATE money SET cp = " + cp + ", sp = " + sp + ", gp = " + gp + ", pp = " + pp + " WHERE name = '" + userID + "';";
+        util.runSQL(sql);
+        msg = "The ferrets have adjusted your wares.  Beware.";
+    } else {
+        msg = "The ferrets say your math doesn't work.  Don't scame a ferret.  They know ferrets.";
+    }
+    return msg;
  },
  splitArguments: function (args) {
     var array_length = args.length;
