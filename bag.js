@@ -7,7 +7,6 @@ module.exports = {
     var pp = 0;
     var pass = false;
     var stuff = [];
-    var inventory = false;
     var deposit = false;
     var withdraw = false;
     var consolidate = false;
@@ -16,7 +15,6 @@ module.exports = {
     var i;
     for (i = 0; i < array_length; i++) {
         pass = false;
-        if (args[i] == "i" || args[i] == "inv" || args[i] == "inventory") { inventory = true; pass = true; }
         if (args[i] == "d" || args[i] == "dp" || args[i] == "deposit") { deposit = true; pass = true; }
         if (args[i] == "w" || args[i] == "with" || args[i] == "withdraw") { withdraw = true; pass = true; }
         if (args[i] == "split") { split = true; pass = true; }
@@ -32,11 +30,10 @@ module.exports = {
     r[2] = gp;
     r[3] = pp;
     r[4] = stuff;
-    r[5] = inventory;
-    r[6] = deposit;
-    r[7] = withdraw;
-    r[8] = split;
-    r[9] = consolidate;
+    r[5] = deposit;
+    r[6] = withdraw;
+    r[7] = split;
+    r[8] = consolidate;
     return r;
  },
  checkForBag: function (userID) {
@@ -56,8 +53,8 @@ module.exports = {
     var gp = args[2];
     var pp = args[3];
     var stuff = args[4];
-    var deposit = args[6];
-    var withdraw = args[7];
+    var deposit = args[5];
+    var withdraw = args[6];
     var msg;
     var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
