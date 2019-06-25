@@ -51,7 +51,6 @@ module.exports = {
     var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
     var moola = row.cp + (10 * row.sp) + (100 * row.gp) + (1000 * row.pp);
-    console.info("moola is " + moola);
     var pp = Math.floor(moola / 1000);
     moola = moola % 1000;
     var gp = Math.floor(moola / 100);
@@ -118,6 +117,24 @@ module.exports = {
     r[1] = haul;
     return r;
  },
+ splitFromDB: function (userID,ways) {
+    var util = require('./util.js');
+    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var row = util.querySingleRow(sql);
+    var haul = row.cp + (10 * row.sp) + (100 * row.gp) + (1000 * row.pp);
+    var per_div = Math.floor(haul / ways);
+    var per_mod = haul % ways;
+    // per player
+    var leftovers;
+    var pp = Math.floor(per_div / 1000);
+    leftovers = per_div % 1000;
+    var gp = Math.floor(leftovers / 100);
+    leftovers = leftovers % 100;
+    var sp = Math.floor(leftovers / 10);
+    var cp = leftovers % 10;
+    var r = "Each party member gets " + pp + " platinum, " + gp + " gold, " + sp + " silver, " + cp + " copper.\n There is " + per_mod + " coopper left over.";
+    return r;
+ },
  splitHaul: function (ways,haul) {
     var per_div = Math.floor(haul / ways);
     var per_mod = haul % ways;
@@ -131,6 +148,11 @@ module.exports = {
     var cp = leftovers % 10;
     var r = "Each party member gets " + pp + " platinum, " + gp + " gold, " + sp + " silver, " + cp + " copper.\n There is " + per_mod + " coopper left over.";
     return r;
+ },
+ wipe: function (userID) {
+    sql = "UPDATE money SET cp = 0, sp = 0, gp = 0, pp = 0 WHERE name = '" + userID + "';";
+    util.runSQL(sql);
+    return "The ferrets have left nothing behind.";
  }
 };
 
