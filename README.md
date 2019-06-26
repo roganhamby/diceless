@@ -22,6 +22,14 @@ CREATE TABLE money (name TEXT, cp INTEGER, sp INTEGER, gp INTEGER, pp INTEGER, c
 
 === Features
 
+== Bag
+
+The ferrets of the bag will store cach and items (eventually) and allow you to deposit,
+withdraw, consolidate odd amounts of coin and project what splitting would be.  Most 
+commands can be combined on a single line except deposit and withdraw.  Wiping the bag 
+entirely clean is a distinct command, /wipebag but if you want to be careful you can simply 
+withdraw as needed instead.
+
 == Dice Rolling
 
 Rolling is done through the /roll command.  The basic format is /roll XdY common to 

@@ -10,11 +10,13 @@ module.exports = {
     var deposit = false;
     var withdraw = false;
     var consolidate = false;
+    var ways;
     var split = false; // will split the coins, which also liquidates them 
     var r = [];
     var i;
     for (i = 0; i < array_length; i++) {
         pass = false;
+        if (args[i].includes("ways")) { ways = args[i]; }
         if (args[i] == "d" || args[i] == "dp" || args[i] == "deposit") { deposit = true; pass = true; }
         if (args[i] == "w" || args[i] == "with" || args[i] == "withdraw") { withdraw = true; pass = true; }
         if (args[i] == "split") { split = true; pass = true; }
@@ -34,6 +36,7 @@ module.exports = {
     r[6] = withdraw;
     r[7] = split;
     r[8] = consolidate;
+    r[9] = ways;
     return r;
  },
  checkForBag: function (userID) {
@@ -119,6 +122,7 @@ module.exports = {
  },
  splitFromDB: function (userID,ways) {
     var util = require('./util.js');
+    ways = ways.split("ways")[0]; 
     var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
     var haul = row.cp + (10 * row.sp) + (100 * row.gp) + (1000 * row.pp);
@@ -132,7 +136,7 @@ module.exports = {
     leftovers = leftovers % 100;
     var sp = Math.floor(leftovers / 10);
     var cp = leftovers % 10;
-    var r = "Each party member gets " + pp + " platinum, " + gp + " gold, " + sp + " silver, " + cp + " copper.\n There is " + per_mod + " coopper left over.";
+    var r = "Each party member gets " + pp + " platinum, " + gp + " gold, " + sp + " silver, " + cp + " copper.\n There is " + per_mod + " coopper left over.  Don't forget to /bagwipe if you are clearing EVERYTHING out.";
     return r;
  },
  splitHaul: function (ways,haul) {
@@ -150,6 +154,7 @@ module.exports = {
     return r;
  },
  wipe: function (userID) {
+    var util = require('./util.js');
     sql = "UPDATE money SET cp = 0, sp = 0, gp = 0, pp = 0 WHERE name = '" + userID + "';";
     util.runSQL(sql);
     return "The ferrets have left nothing behind.";

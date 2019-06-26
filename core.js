@@ -67,15 +67,17 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 var withdraw = returned_args[6];
                 var split = returned_args[7];
                 var consolidate = returned_args[8];
+                var ways = returned_args[9];
                 badparams = false;                            
                 msg = "The ferrets are waiting.";
                 if (deposit == true && withdraw == true) { badparams = true; msg = "You can't have depoit and withdraw on the same command."; }
                 if (deposit == false && withdraw == false && split == false && consolidate == false) { badparams = true; msg = "You haven't given the ferrets anything to do.  They are now bored."; }
+                if (split == true && typeof ways == 'undefined') { badparams = false; msg = "The ferrets can't split money without specifying how many ways to split it."; }
                 if (badparams == false) {
                     //if (consolidate == true) { msg = msg + " " + bag.consolidate; } 
                     if (deposit == true || withdraw == true) { msg = msg + " " + bag.depositOrWithdraw(userID,returned_args); }
                     if (consolidate == true) { bag.consolidate(userID); msg = msg + " " + "Monies have been consolidated."; }
-                    if (split == true) { msg = msg + " " + bag.splitFromDB(userID); }
+                    if (split == true && typeof ways !== 'undefined') { msg = msg + " " + bag.splitFromDB(userID,ways); }
                 }
                 msg = msg + bag.inventory(userID);
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
@@ -143,6 +145,14 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: msg
                 });
             break;
+            case 'wipebag':
+                msg = bag.wipe(userID);
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+            break;                
             case 'diceless':
                 msg = "Diceless supports the following commands:\n";
                 msg = msg + "    /trinket #gives one from a random list of items\n";
@@ -151,6 +161,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 msg = msg + "    /dndstats dpl #rolls 4d6 six times and rerolls 1s\n";
                 msg = msg + "    /fate +3 #rolls 4dFATE DICE and gives result type\n";
                 msg = msg + "    /split 4pp 3gp 2cp 8cp 7sp 9pp 5 ways #adds up the money and splits it\n";
+                msg = msg + "    /bag deposit|withdraw 1cp 2sp 3gp split consolidate split \n";
+                msg = msg + "    /bagwipe #wipes the bag, wipes wipe \n";
                 msg = msg + "# comments will append comments to the response from the bot #see README for more info\n";
                 msg = msg + "source at https://github.com/roganhamby/diceless\n";
                 msg = msg + "project tracking at https://trello.com/b/RN9kMwiS/diceless\n";
