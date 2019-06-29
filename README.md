@@ -18,17 +18,20 @@ npm install https://github.com/woor/discord.io/tarball/gateway_v6
 
 === The SQL
 
-CREATE TABLE money (name TEXT, cp INTEGER, sp INTEGER, gp INTEGER, pp INTEGER, credits INTEGER, nuyen INTEGER);
+CREATE TABLE inventory (name TEXT, cp INTEGER, sp INTEGER, gp INTEGER, pp INTEGER, credits INTEGER, nuyen INTEGER, stuff TEXT);
 
 === Features
 
 == Bag
 
-The ferrets of the bag will store cach and items (eventually) and allow you to deposit,
+The ferrets of the bag will store cach and items and allow you to deposit,
 withdraw, consolidate odd amounts of coin and project what splitting would be.  Most 
 commands can be combined on a single line except deposit and withdraw.  Wiping the bag 
 entirely clean is a distinct command, /wipebag but if you want to be careful you can simply 
 withdraw as needed instead.
+
+You can also put items on the line but they are space delimited so Potion of Healing will become
+three items but PotionofHealing or Potion_of_Healing will not.
 
 == Dice Rolling
 

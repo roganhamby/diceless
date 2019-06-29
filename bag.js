@@ -41,17 +41,17 @@ module.exports = {
  },
  checkForBag: function (userID) {
     var util = require('./util.js');
-    var sql = "SELECT COUNT(*) AS c FROM money WHERE name = '" + userID + "';";
+    var sql = "SELECT COUNT(*) AS c FROM inventory WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
     if (row.c == 0) {  
-        sql = "INSERT INTO money (name,cp,sp,gp,pp) VALUES ('" + userID + "',0,0,0,0);";
+        sql = "INSERT INTO inventory (name,cp,sp,gp,pp,stuff) VALUES ('" + userID + "',0,0,0,0,'');";
         util.runSQL(sql);
     }
     return true;
  },
  consolidate: function (userID) {
     var util = require('./util.js');
-    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var sql = "SELECT cp, sp, gp, pp FROM inventory WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
     var moola = row.cp + (10 * row.sp) + (100 * row.gp) + (1000 * row.pp);
     var pp = Math.floor(moola / 1000);
@@ -60,8 +60,9 @@ module.exports = {
     moola = moola % 100;
     var sp = Math.floor(moola / 10);
     var cp = moola % 10;
-    sql = "UPDATE money SET cp = " + cp + ", sp = " + sp + ", gp = " + gp + ", pp = " + pp + " WHERE name = '" + userID + "';";
+    sql = "UPDATE inventory SET cp = " + cp + ", sp = " + sp + ", gp = " + gp + ", pp = " + pp + " WHERE name = '" + userID + "';";
     util.runSQL(sql);
+    return;
  },
  depositOrWithdraw: function (userID,args) {
     var util = require('./util.js');
@@ -73,22 +74,29 @@ module.exports = {
     var deposit = args[5];
     var withdraw = args[6];
     var msg;
-    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var sql = "SELECT cp, sp, gp, pp, stuff FROM inventory WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
+    var row_stuff = row.stuff.split(' ');
     if (withdraw == true) {
         cp = row.cp - cp;
         sp = row.sp - sp;
         gp = row.gp - gp;
         pp = row.pp - pp;
+        row_stuff = row_stuff.filter( function( el ) {
+            return stuff.indexOf( el ) < 0;
+        } ); 
+        stuff = row_stuff;
     }
     if (deposit == true) {
         cp = cp + row.cp;
         sp = sp + row.sp;
         gp = gp + row.gp;
         pp = pp + row.pp;
+        stuff = stuff.concat(row_stuff);
     }
     if (cp >= 0 && sp >= 0 && gp >= 0 && pp >= 0) {
-        sql = "UPDATE money SET cp = " + cp + ", sp = " + sp + ", gp = " + gp + ", pp = " + pp + " WHERE name = '" + userID + "';";
+        var stuff_string = stuff.join(' ');
+        sql = "UPDATE inventory SET cp = " + cp + ", sp = " + sp + ", gp = " + gp + ", pp = " + pp + ", stuff = '" + stuff_string + "' WHERE name = '" + userID + "';";
         util.runSQL(sql);
         msg = "The ferrets have adjusted your wares.  Beware.";
     } else {
@@ -98,9 +106,9 @@ module.exports = {
  },
  inventory: function (userID) {
     var util = require('./util.js');
-    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var sql = "SELECT cp, sp, gp, pp, stuff FROM inventory WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
-    var msg = "\n Current bag contents: " + row.cp + " copper, " + row.sp + " silver, " + row.gp + " gold, " + row.pp + " platinum.";
+    var msg = "\n Current bag contents: " + row.cp + " copper, " + row.sp + " silver, " + row.gp + " gold, " + row.pp + " platinum. " + row.stuff;
     return msg;
  },
  splitArguments: function (args) {
@@ -123,12 +131,11 @@ module.exports = {
  splitFromDB: function (userID,ways) {
     var util = require('./util.js');
     ways = ways.split("ways")[0]; 
-    var sql = "SELECT cp, sp, gp, pp FROM money WHERE name = '" + userID + "';";
+    var sql = "SELECT cp, sp, gp, pp FROM inventory WHERE name = '" + userID + "';";
     var row = util.querySingleRow(sql);
     var haul = row.cp + (10 * row.sp) + (100 * row.gp) + (1000 * row.pp);
     var per_div = Math.floor(haul / ways);
     var per_mod = haul % ways;
-    // per player
     var leftovers;
     var pp = Math.floor(per_div / 1000);
     leftovers = per_div % 1000;
@@ -142,7 +149,6 @@ module.exports = {
  splitHaul: function (ways,haul) {
     var per_div = Math.floor(haul / ways);
     var per_mod = haul % ways;
-    // per player
     var leftovers;
     var pp = Math.floor(per_div / 1000);
     leftovers = per_div % 1000;
@@ -155,7 +161,7 @@ module.exports = {
  },
  wipe: function (userID) {
     var util = require('./util.js');
-    sql = "UPDATE money SET cp = 0, sp = 0, gp = 0, pp = 0 WHERE name = '" + userID + "';";
+    sql = "UPDATE inventory SET cp = 0, sp = 0, gp = 0, pp = 0, stuff = NULL WHERE name = '" + userID + "';";
     util.runSQL(sql);
     return "The ferrets have left nothing behind.";
  }

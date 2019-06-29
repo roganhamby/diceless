@@ -3,6 +3,14 @@ module.exports = {
     var r = Math.floor(Math.random() * max) +1;
     return r;
  },
+ queryMultipleRows: function (sql) {
+    const Database = require('better-sqlite3');
+    const db = new Database('./diceless.db');
+    const sql_stmt = db.prepare(sql);
+    var rows = sql_stmt.all();
+    db.close();
+    return rows;
+ },
  querySingleRow: function (sql) {
     const Database = require('better-sqlite3');
     const db = new Database('./diceless.db');

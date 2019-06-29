@@ -161,7 +161,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 msg = msg + "    /dndstats dpl #rolls 4d6 six times and rerolls 1s\n";
                 msg = msg + "    /fate +3 #rolls 4dFATE DICE and gives result type\n";
                 msg = msg + "    /split 4pp 3gp 2cp 8cp 7sp 9pp 5 ways #adds up the money and splits it\n";
-                msg = msg + "    /bag deposit|withdraw 1cp 2sp 3gp split consolidate split \n";
+                msg = msg + "    /bag deposit|withdraw 1cp 2sp 3gp split consolidate split ring potion weapon\n";
                 msg = msg + "    /bagwipe #wipes the bag, wipes wipe \n";
                 msg = msg + "# comments will append comments to the response from the bot #see README for more info\n";
                 msg = msg + "source at https://github.com/roganhamby/diceless\n";
