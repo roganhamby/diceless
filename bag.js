@@ -161,7 +161,7 @@ module.exports = {
  },
  wipe: function (userID) {
     var util = require('./util.js');
-    sql = "UPDATE inventory SET cp = 0, sp = 0, gp = 0, pp = 0, stuff = NULL WHERE name = '" + userID + "';";
+    sql = "UPDATE inventory SET cp = 0, sp = 0, gp = 0, pp = 0, stuff = '' WHERE name = '" + userID + "';";
     util.runSQL(sql);
     return "The ferrets have left nothing behind.";
  }

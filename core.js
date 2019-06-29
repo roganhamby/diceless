@@ -145,7 +145,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: msg
                 });
             break;
-            case 'wipebag':
+            case 'bagwipe':
                 msg = bag.wipe(userID);
                 if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
                 bot.sendMessage({
