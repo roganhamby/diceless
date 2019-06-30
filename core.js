@@ -86,6 +86,14 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: msg
                 });
            break;
+           case 'bagwipe':
+                msg = bag.wipe(userID);
+                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+                bot.sendMessage({
+                    to: channelID,
+                    message: msg
+                });
+           break;
            case 'dndstats':
                 returned_args = rolling.rollArguments(args);
                 roll = returned_args[0];
@@ -145,14 +153,13 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: msg
                 });
             break;
-            case 'bagwipe':
-                msg = bag.wipe(userID);
-                if (typeof comment !== 'undefined') { msg = msg + "\n" + "#" + comment; }
+            case 'wod':
+                msg = rolling.wod(args);
                 bot.sendMessage({
                     to: channelID,
                     message: msg
-                });
-            break;                
+                });                
+            break;
             case 'diceless':
                 msg = "Diceless supports the following commands:\n";
                 msg = msg + "    /trinket #gives one from a random list of items\n";

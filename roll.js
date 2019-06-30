@@ -167,5 +167,7 @@ module.exports = {
     if (Number.isInteger(parseInt(modifier)) == false) { pass = 0; }
     if (pass == 0) { msg = 'Natural -1. Please check your command syntax.'; }
     return msg;
+ },
+ wod: function (args) {
  }
 };
